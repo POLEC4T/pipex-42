@@ -1,0 +1,8 @@
+outfile*
+infile*
+pipex
+*.o
+*.d
+*.out
+.obj
+*tester
