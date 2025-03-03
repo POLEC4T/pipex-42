@@ -7,7 +7,10 @@ CC=cc
 CFLAGS=-Wall -Wextra -Werror -I$(INC_DIR)
 
 SRCS =	$(SRC_DIR)/main.c \
-		$(SRC_DIR)/frees.c
+		$(SRC_DIR)/frees.c \
+		$(SRC_DIR)/output.c \
+		$(SRC_DIR)/utils.c \
+		$(SRC_DIR)/inits.c
 
 
 OBJS = ${SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o}

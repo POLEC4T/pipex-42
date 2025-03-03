@@ -5,4 +5,6 @@ pipex
 *.d
 *.out
 .obj
-*tester
+*test*
+OUI
+NON

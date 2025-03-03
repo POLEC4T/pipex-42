@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mniemaz <mniemaz@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: miloniemaz <mniemaz@student.42lyon.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 15:41:22 by mniemaz           #+#    #+#             */
-/*   Updated: 2025/02/25 17:41:01 by mniemaz          ###   ########.fr       */
+/*   Updated: 2025/03/01 04:29:39 by miloniemaz       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,41 +14,18 @@
 
 // ./pipex infile "ls -l" "wc -l" outfile
 
-char	**get_paths(char **env)
+char	*get_cmd_path(t_data *d, char *cmd)
 {
-	char	**res;
-	int		i;
-
-	i = 0;
-	while (env[i])
-	{
-		if (env[i][0] == 'P' && env[i][1] == 'A' && env[i][2] == 'T'
-			&& env[i][3] == 'H' && env[i][4] == '=')
-		{
-			res = ft_split(env[i] + 5, ":");
-			if (!res)
-				return (NULL);
-			return (res);
-		}
-		i++;
-	}
-	return (NULL);
-}
-
-char	*get_accessible_path(char **env, char *cmd)
-{
-	char	**paths;
 	char	*curr_path;
 	int		i;
 
-	paths = get_paths(env);
-	if (!paths)
-		return (NULL);
+	if (access(cmd, X_OK) != -1)
+		return (cmd);
 	cmd = ft_strjoin("/", cmd);
 	i = 0;
-	while (paths[i])
+	while (d->paths[i])
 	{
-		curr_path = ft_strjoin(paths[i], cmd);
+		curr_path = ft_strjoin(d->paths[i], cmd);
 		if (access(curr_path, X_OK) != -1)
 		{
 			free(cmd);
@@ -56,70 +33,96 @@ char	*get_accessible_path(char **env, char *cmd)
 		}
 		i++;
 	}
+	msg("command not found", cmd + 1, STDERR_FILENO);
 	free(cmd);
 	return (NULL);
 }
 
+static void	redirect(int input, int output)
+{
+	if (dup2(input, STDIN_FILENO) == -1)
+	{
+		msg("Error dup2", strerror(errno), STDERR_FILENO);
+		exit(EXIT_FAILURE);
+	}
+	if (dup2(output, STDOUT_FILENO) == -1)
+	{
+		msg("Error dup2", strerror(errno), STDERR_FILENO);
+		exit(EXIT_FAILURE);
+	}
+}
+
+void close_fds(t_data *d)
+{
+	close(d->fds.in);
+	close(d->fds.out);
+	close(d->pipe[0]);
+	close(d->pipe[1]);
+}
+void prep_exec_cmd(t_data *d, char *str_cmd, int curr_input, int curr_output)
+{
+	d->cmd = ft_split(str_cmd, " ");
+	if (!d->cmd)
+	{
+		msg("Error split", strerror(errno), STDERR_FILENO);
+		exit(EXIT_FAILURE);
+	}
+	d->curr_input = curr_input;
+	d->curr_output = curr_output;
+}
+
+void	exec_cmd(t_data *d, char **env)
+{
+	d->cmd_path = get_cmd_path(d, d->cmd[0]);
+	if (!d->cmd_path)
+	{
+		free_str_tab(d->cmd);
+		free(d->cmd_path);
+		close_fds(d);
+		exit(EXIT_FAILURE);
+	}
+	redirect(d->curr_input, d->curr_output);
+	close_fds(d);
+	if (execve(d->cmd_path, d->cmd, env) == -1)
+	{
+		msg("Error execve", strerror(errno), STDERR_FILENO);
+		free_str_tab(d->cmd);
+		free(d->cmd_path);
+		exit(EXIT_FAILURE);
+	}
+}
+
+
 int	main(int ac, char **av, char **env)
 {
-	int		pid;
-	int		fd[2];
-	char	**cmd_1;
-	char	**cmd_2;
-	char	*cmd_path;
-	int		infile_fd;
-	int		outfile_fd;
+	t_data	d;
 
 	if (ac != 5)
-		return (0);
-	(void)ac;
-	(void)av;
-	pipe(fd);
-	pid = fork();
-	infile_fd = open(av[1], O_RDONLY);
-	outfile_fd = open(av[4], O_WRONLY | O_CREAT);
-	if (!pid)
 	{
-		close(fd[0]);
-		cmd_1 = ft_split(av[2], " ");
-		if (!cmd_1)
-		{
-			close(fd[1]);
-			exit(1);
-		}
-		cmd_path = get_accessible_path(env, cmd_1[0]);
-		if (!cmd_path)
-		{
-			free_str_tab(cmd_1);
-			close(fd[1]);
-			exit(1);
-		}
-		dup2(infile_fd, STDIN_FILENO); // stdin devient infile
-		dup2(fd[1], STDOUT_FILENO);    // stdout devient fd write
-		close(fd[1]);
-		execve(cmd_path, cmd_1, env);
+		msg("Usage: ./pipex infile cmd1 cmd2 outfile", "", STDERR_FILENO);
+		return (1);
 	}
-	else
+	init_data(&d, av[1], av[4], env);
+	secure_fork(&d.pids[0]);
+	if (!d.pids[0])
 	{
-		close(fd[1]);
-		waitpid(pid, NULL, -1);
-		cmd_2 = ft_split(av[3], " ");
-		if (!cmd_2)
-		{
-			close(fd[0]);
-			exit(1);
-		}
-		cmd_path = get_accessible_path(env, cmd_2[0]);
-		if (!cmd_path)
-		{
-			free_str_tab(cmd_2);
-			close(fd[0]);
-			exit(1);
-		}
-		dup2(fd[0], STDIN_FILENO);       // stdin devient fd read
-		dup2(outfile_fd, STDOUT_FILENO); // stdout devient outfile
-		close(fd[0]);
-		execve(cmd_path, cmd_2, env);
+		prep_exec_cmd(&d, av[2], d.fds.in, d.pipe[1]);
+		exec_cmd(&d, env);
+		return (1);
 	}
-	return (0);
+	secure_fork(&d.pids[1]);
+	if (!d.pids[1])
+	{
+		// waitpid(d.pids[0], NULL, -1);
+		prep_exec_cmd(&d, av[3], d.pipe[0], d.fds.out);
+		exec_cmd(&d, env);
+		return (1);
+	}
+	close_fds(&d);
+	int status;
+	waitpid(d.pids[0], &status, 0);
+	waitpid(d.pids[1], &status, 0);
+	if (WIFEXITED(status))
+		status = WEXITSTATUS(status);
+	return (status);
 }
