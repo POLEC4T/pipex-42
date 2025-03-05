@@ -1,10 +1,12 @@
-outfile*
-infile*
+*outfile*
+*infile*
 pipex
 *.o
 *.d
+*.a
 *.out
 .obj
 *test*
+.vscode
 OUI
 NON
