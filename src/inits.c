@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   inits.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: miloniemaz <mniemaz@student.42lyon.fr>     +#+  +:+       +#+        */
+/*   By: mniemaz <mniemaz@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 15:41:22 by mniemaz           #+#    #+#             */
-/*   Updated: 2025/03/01 04:26:21 by miloniemaz       ###   ########.fr       */
+/*   Updated: 2025/03/05 10:49:41 by mniemaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
 
-char **	get_paths(char **env)
+char	**get_paths(char **env)
 {
 	int		i;
 	char	**res;
@@ -36,32 +36,37 @@ char **	get_paths(char **env)
 	return (NULL);
 }
 
-void set_fds(t_data *d, char *infile, char *outfile)
+void	set_fds(t_data *d, char *infile, char *outfile)
 {
 	d->fds.in = open(infile, O_RDONLY, 644);
 	if (d->fds.in == -1)
 	{
-		msg("Error opening infile", strerror(errno), STDERR_FILENO);
-		exit(EXIT_FAILURE);
+		msg(strerror(errno), infile, STDERR_FILENO);
 	}
 	d->fds.out = open(outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (d->fds.out == -1)
+	{
+		msg(strerror(errno), outfile, STDERR_FILENO);
+	}
 }
 
-void init_data(t_data *d, char *infile, char *outfile, char **env)
+void clean_init_data(t_data *d)
 {
-    d->cmd = NULL;
-    d->cmd_path = NULL;
-    set_fds(d, infile, outfile);
+	d->cmd = NULL;
+	d->cmd_path = NULL;
+	d->paths = NULL;
+	d->nb_cmds = 0;	
+}
+
+void	init_data(t_data *d, char **av, int ac, char **env)
+{
+	d->nb_cmds = ac - 3;
+	set_fds(d, av[1], av[ac - 1]);
 	pipe(d->pipe);
 	d->paths = get_paths(env);
 	if (!d->paths)
 	{
-		close(d->fds.in);
-		close(d->fds.out);
-		close(d->pipe[0]);
-		close(d->pipe[1]);
+		close_fds(d);
 		exit(EXIT_FAILURE);
 	}
-	d->pids[0] = 0;
-	d->pids[1] = 0;
 }

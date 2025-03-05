@@ -23,10 +23,10 @@ libs:
 	@$(MAKE) -C $(LIBFT_DIR)
 
 $(NAME): $(OBJS)
-	$(CC) $(OBJS) -o $(NAME) $(LIBFT_DIR)/libft.a
+	$(CC) $(OBJS) -o $(NAME) $(LIBFT_DIR)/libft.a -g3
 
 $(OBJ_DIR)/%.o : $(SRC_DIR)/%.c $(INC_DIR)/pipex.h Makefile | $(OBJ_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@ -g3
 
 $(OBJ_DIR):
 	mkdir -p $(OBJ_DIR)
