@@ -66,19 +66,23 @@ all: ${NAME}
 
 -include $(DEPS)
 %.o: %.c
-	${CC} ${CFLAGS} -MMD -MP -c $< -o $@
+	@${CC} ${CFLAGS} -MMD -MP -c $< -o $@
+	@echo "Compiled $<"
 
 ${NAME}: ${OBJS}
-	ar rcs ${NAME} ${OBJS}
+	@ar rcs ${NAME} ${OBJS}
+	@echo "libft.a created"
 
 bonus:
 	$(MAKE) ${NAME} SRC="${SRC} ${B_SRC}"
 
 clean:
-	rm -f ${OBJS} ${B_OBJS} ${DEPS}
+	@rm -f ${OBJS} ${B_OBJS} ${DEPS}
+	@echo "Cleaned libft"
 
-fclean: clean
-	rm -f ${NAME}
+fclean:
+	@rm -f ${OBJS} ${B_OBJS} ${DEPS} ${NAME}
+	@echo "Full cleaned libft"
 
 re: fclean all
 
