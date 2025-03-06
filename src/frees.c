@@ -6,32 +6,15 @@
 /*   By: mniemaz <mniemaz@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:42:20 by mniemaz           #+#    #+#             */
-/*   Updated: 2025/03/04 10:51:33 by mniemaz          ###   ########.fr       */
+/*   Updated: 2025/03/06 12:53:44 by mniemaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
 
-void close_fds(t_data *d)
-{
-	if (d->fds.in != -1)
-		close(d->fds.in);
-	if (d->fds.out != -1)
-		close(d->fds.out);
-	close(d->pipe[0]);
-	close(d->pipe[1]);
-}
-
-void free_and_close_fds_data(t_data *d)
-{
-	// free_str_tab(d->cmd);
-	// free(d->cmd_path);
-	free_str_tab(d->paths);
-}
-
 void	free_str_tab(char **tab)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (tab[i])
@@ -39,17 +22,28 @@ void	free_str_tab(char **tab)
 	free(tab);
 }
 
-void	exit_error(int error_status, t_data *data)
+void	exit_process(int error_status, t_data *data)
 {
+	int	i;
+
 	if (data)
 	{
-		close_fds(data);
+		close_fds_and_pipes(data);
 		if (data->cmd != NULL)
 			free_str_tab(data->cmd);
 		if (data->cmd_path != NULL)
 			free(data->cmd_path);
 		if (data->paths != NULL)
 			free_str_tab(data->paths);
+		if (data->pids != NULL)
+			free(data->pids);
+		if (data->pipes != NULL)
+		{
+			i = -1;
+			while (data->pipes[++i])
+				free(data->pipes[i]);
+			free(data->pipes);
+		}
 	}
 	exit(error_status);
 }
