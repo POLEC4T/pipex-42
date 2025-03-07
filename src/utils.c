@@ -6,11 +6,12 @@
 /*   By: mniemaz <mniemaz@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 15:41:22 by mniemaz           #+#    #+#             */
-/*   Updated: 2025/03/06 14:14:46 by mniemaz          ###   ########.fr       */
+/*   Updated: 2025/03/07 19:58:39 by mniemaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
+
 
 /**
  * @brief redirects the standard input and output to the given file descriptors
@@ -18,13 +19,9 @@
 void	redirect(int input, int output, t_data *d)
 {
 	if (dup2(input, STDIN_FILENO) == -1)
-	{
 		exit_process(EXIT_FAILURE, d);
-	}
 	if (dup2(output, STDOUT_FILENO) == -1)
-	{
 		exit_process(EXIT_FAILURE, d);
-	}
 }
 
 void	secure_fork(int *pid, t_data *d)
@@ -32,7 +29,7 @@ void	secure_fork(int *pid, t_data *d)
 	*pid = fork();
 	if (*pid == -1)
 	{
-		msg("Error fork", strerror(errno), STDERR_FILENO);
+		msg(strerror(errno), ": ", "fork", STDERR_FILENO);
 		exit_process(EXIT_FAILURE, d);
 	}
 }

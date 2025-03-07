@@ -6,13 +6,13 @@
 /*   By: mniemaz <mniemaz@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 11:11:36 by mniemaz           #+#    #+#             */
-/*   Updated: 2025/02/25 16:47:35 by mniemaz          ###   ########.fr       */
+/*   Updated: 2025/03/07 14:26:07 by mniemaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static void	free_str_tab(char **tab, int limit)
+static void	free_tab(char **tab, int limit)
 {
 	int	i;
 
@@ -92,7 +92,7 @@ char	**ft_split(char const *s, char *delim)
 	i_alloc_res = alloc_n_write(res, s, delim);
 	if (i_alloc_res != -1)
 	{
-		free_str_tab(res, i_alloc_res);
+		free_tab(res, i_alloc_res);
 		return (NULL);
 	}
 	res[nb_words] = NULL;

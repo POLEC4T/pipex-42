@@ -6,7 +6,7 @@
 /*   By: mniemaz <mniemaz@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 11:37:03 by mniemaz           #+#    #+#             */
-/*   Updated: 2025/03/06 13:29:25 by mniemaz          ###   ########.fr       */
+/*   Updated: 2025/03/07 10:15:01 by mniemaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ void	close_fds_in_out(t_data *d)
 		close(d->fds.in);
 	if (d->fds.out != -1)
 		close(d->fds.out);
+	d->fds.in = -1;
+	d->fds.out = -1;
 }
 
 void	close_pipe_index(int index, t_data *d)
@@ -32,6 +34,8 @@ void	close_pipe_index(int index, t_data *d)
 		close(d->pipes[index][READ]);
 	if (d->pipes[index][WRITE] != -1)
 		close(d->pipes[index][WRITE]);
+	d->pipes[index][READ] = -1;
+	d->pipes[index][WRITE] = -1;
 }
 
 void	close_pipes(t_data *d)

@@ -1,17 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   child.c                                            :+:      :+:    :+:   */
+/*   children.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mniemaz <mniemaz@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 13:18:51 by mniemaz           #+#    #+#             */
-/*   Updated: 2025/03/06 13:19:12 by mniemaz          ###   ########.fr       */
+/*   Updated: 2025/03/07 19:44:39 by mniemaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
 
+void	redirects_stderr(t_data *d, int i_cmds)
+{
+	int	err_fd;
+
+	err_fd = open(d->err_file_names[i_cmds], O_CREAT | O_WRONLY | O_TRUNC,
+			0644);
+	dup2(err_fd, STDERR_FILENO);
+	close(err_fd);
+}
+
+/**
+ * @brief set the command to execute and its path
+ * @example set_cmd(d, "ls -l") => d->cmd = ["ls", "-l", NULL]
+ * @details if str_cmd is "", d->cmd is set to ["", NULL]
+ */
 void	set_cmd(t_data *d, char *str_cmd)
 {
 	if (ft_strlen(str_cmd) == 0)
@@ -20,7 +35,7 @@ void	set_cmd(t_data *d, char *str_cmd)
 		d->cmd = ft_split(str_cmd, " ");
 	if (!d->cmd)
 	{
-		msg("Error split", strerror(errno), STDERR_FILENO);
+		msg(strerror(errno), ": ft_split", NULL, STDERR_FILENO);
 		exit(EXIT_FAILURE);
 	}
 	d->cmd_path = get_cmd_path(d, d->cmd[0]);
@@ -55,7 +70,7 @@ void	exec_cmd(t_data *d, char **env)
 	close_fds_and_pipes(d);
 	if (execve(d->cmd_path, d->cmd, env) == -1)
 	{
-		msg(strerror(errno), d->cmd[0], STDERR_FILENO);
+		msg(strerror(errno), ": ", d->cmd[0], STDERR_FILENO);
 		exit_process(EXIT_FAILURE, d);
 	}
 }

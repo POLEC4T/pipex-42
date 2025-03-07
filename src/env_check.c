@@ -6,7 +6,7 @@
 /*   By: mniemaz <mniemaz@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 11:43:43 by mniemaz           #+#    #+#             */
-/*   Updated: 2025/03/05 11:44:18 by mniemaz          ###   ########.fr       */
+/*   Updated: 2025/03/07 10:30:47 by mniemaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,14 @@ char	**get_paths(char **env)
 			res = ft_split(env[i] + 5, ":");
 			if (!res)
 			{
-				msg("Error ft_split", strerror(errno), STDERR_FILENO);
+				msg(strerror(errno), ": ", "ft_split", STDERR_FILENO);
 				return (NULL);
 			}
 			return (res);
 		}
 		i++;
 	}
-	msg("Error", "PATH not found", STDERR_FILENO);
+	msg("Error", ": ", "PATH not found", STDERR_FILENO);
 	return (NULL);
 }
 
@@ -55,7 +55,7 @@ char	*get_cmd_path(t_data *d, char *cmd)
 		}
 		free(curr_path);
 	}
-	msg("command not found", cmd + 1, STDERR_FILENO);
+	msg("command not found", ": ", cmd + 1, STDERR_FILENO);
 	free(cmd);
 	return (NULL);
 }

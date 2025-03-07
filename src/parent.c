@@ -6,7 +6,7 @@
 /*   By: mniemaz <mniemaz@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 13:23:58 by mniemaz           #+#    #+#             */
-/*   Updated: 2025/03/06 14:56:53 by mniemaz          ###   ########.fr       */
+/*   Updated: 2025/03/07 20:01:32 by mniemaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,9 @@ void	start_children(t_data *d, char **av, char **env)
 		secure_fork(&d->pids[i_cmds], d);
 		if (!d->pids[i_cmds])
 		{
+			redirects_stderr(d, i_cmds);
 			set_curr_in_out(i_cmds, d);
-			set_cmd(d, av[i_cmds + 2]);
+			set_cmd(d, av[2 + d->is_here_doc + i_cmds]);
 			exec_cmd(d, env);
 		}
 		if (i_cmds > 0)
@@ -34,6 +35,9 @@ void	start_children(t_data *d, char **av, char **env)
 	close_fds_in_out(d);
 }
 
+/**
+ * @brief When all children have been started, the parent waits for them to end
+ */
 int	wait_children(t_data *d)
 {
 	int	status;

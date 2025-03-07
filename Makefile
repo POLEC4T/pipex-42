@@ -20,6 +20,7 @@ SRC_FILES =	main.c \
 			utils.c \
 			children.c \
 			parent.c \
+			inits2.c \
 			inits.c
 
 SRCS = $(addprefix $(SRC_DIR)/, $(SRC_FILES))
