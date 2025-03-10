@@ -33,7 +33,7 @@ NAME=pipex
 
 BONUS=0
 
-all: libs check_bonus $(NAME)
+all: libs $(BUILD_DIR) check_bonus $(NAME)
 	@echo "$(GREEN)Pipex ready$(END_COLOR)"
 
 libs:
@@ -69,20 +69,24 @@ $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
 	@echo "Created $(OBJ_DIR)/ "
 
+$(BUILD_DIR):
+	@mkdir -p $(BUILD_DIR)
+	@echo "Created $(BUILD_DIR)/ "
+
 clean:
 	@$(MAKE) -C $(LIBFT_DIR) clean
-	@rm -rf $(OBJ_DIR)
+	@rm -rf $(OBJ_DIR) $(BUILD_DIR)
 	@rm -f $(BONUS_FILE)
 	@echo "Cleaned pipex"
 
 fclean: 
 	@$(MAKE) -C $(LIBFT_DIR) fclean
-	@rm -rf $(OBJ_DIR) $(NAME)
+	@rm -rf $(OBJ_DIR) $(NAME) $(BUILD_DIR)
 	@rm -f $(BONUS_FILE)
 	@echo "Full cleaned pipex"
 
 clean_pipex:
-	@rm -rf $(OBJ_DIR) $(NAME)
+	@rm -rf $(OBJ_DIR) $(NAME) $(BUILD_DIR)
 	@echo "Cleaned pipex (not libft)"
 
 re : fclean all
