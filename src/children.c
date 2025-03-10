@@ -6,7 +6,7 @@
 /*   By: mniemaz <mniemaz@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 13:18:51 by mniemaz           #+#    #+#             */
-/*   Updated: 2025/03/10 13:26:52 by mniemaz          ###   ########.fr       */
+/*   Updated: 2025/03/10 14:12:08 by mniemaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ static void	set_cmd(t_data *d, char *str_cmd)
 	d->cmd_path = get_cmd_path(d, d->cmd[0]);
 	if (!d->cmd_path)
 	{
-		exit_process(STDERR_FILENO, d);
+		exit_process(127, d);
 	}
 }
 
