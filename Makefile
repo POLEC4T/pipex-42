@@ -1,8 +1,9 @@
 SRC_DIR=src
 INC_DIR=include
-OBJ_DIR=.obj
+BUILD_DIR=.build
+OBJ_DIR=$(BUILD_DIR)/.obj
 LIBFT_DIR=libft
-BONUS_FILE=.bonus_flag
+BONUS_FILE=$(BUILD_DIR)/.bonus_flag
 
 GREEN=\033[0;32m
 END_COLOR=\033[0m
@@ -21,6 +22,7 @@ SRC_FILES =	main.c \
 			children.c \
 			parent.c \
 			inits2.c \
+			here_doc.c \
 			inits.c
 
 SRCS = $(addprefix $(SRC_DIR)/, $(SRC_FILES))
