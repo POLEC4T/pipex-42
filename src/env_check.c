@@ -6,7 +6,7 @@
 /*   By: mniemaz <mniemaz@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 11:43:43 by mniemaz           #+#    #+#             */
-/*   Updated: 2025/03/07 10:30:47 by mniemaz          ###   ########.fr       */
+/*   Updated: 2025/03/10 11:07:40 by mniemaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ char	**get_paths(char **env)
 			res = ft_split(env[i] + 5, ":");
 			if (!res)
 			{
-				msg(strerror(errno), ": ", "ft_split", STDERR_FILENO);
+				msg("ft_split", ": ", strerror(errno), STDERR_FILENO);
 				return (NULL);
 			}
 			return (res);

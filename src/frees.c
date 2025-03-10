@@ -6,7 +6,7 @@
 /*   By: mniemaz <mniemaz@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:42:20 by mniemaz           #+#    #+#             */
-/*   Updated: 2025/03/07 20:14:52 by mniemaz          ###   ########.fr       */
+/*   Updated: 2025/03/10 13:00:30 by mniemaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,6 @@ void	free_tab(void **tab)
 		free(tab[i++]);
 	free(tab);
 }
-
-
 
 void	exit_process(int error_status, t_data *data)
 {

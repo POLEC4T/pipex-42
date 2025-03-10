@@ -6,12 +6,11 @@
 /*   By: mniemaz <mniemaz@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 15:41:22 by mniemaz           #+#    #+#             */
-/*   Updated: 2025/03/07 19:58:39 by mniemaz          ###   ########.fr       */
+/*   Updated: 2025/03/10 13:27:32 by mniemaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
-
 
 /**
  * @brief redirects the standard input and output to the given file descriptors
@@ -29,7 +28,7 @@ void	secure_fork(int *pid, t_data *d)
 	*pid = fork();
 	if (*pid == -1)
 	{
-		msg(strerror(errno), ": ", "fork", STDERR_FILENO);
+		msg("fork", ": ", strerror(errno), STDERR_FILENO);
 		exit_process(EXIT_FAILURE, d);
 	}
 }

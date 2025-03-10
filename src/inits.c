@@ -6,7 +6,7 @@
 /*   By: mniemaz <mniemaz@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 15:41:22 by mniemaz           #+#    #+#             */
-/*   Updated: 2025/03/07 20:03:51 by mniemaz          ###   ########.fr       */
+/*   Updated: 2025/03/10 13:32:16 by mniemaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,20 +18,20 @@ static void	set_fds(t_data *d, char *infile, char *outfile)
 	{
 		d->fds.in = open(HEREDOC_FILENAME, O_CREAT | O_RDONLY | O_TRUNC, 0644);
 		if (d->fds.in == -1)
-			msg(strerror(errno), ": ", HEREDOC_FILENAME, STDERR_FILENO);
+			msg(HEREDOC_FILENAME, ": ", strerror(errno), STDERR_FILENO);
 	}
 	else
 	{
 		d->fds.in = open(infile, O_RDONLY, 644);
 		if (d->fds.in == -1)
-			msg(strerror(errno), ": ", infile, STDERR_FILENO);
+			msg(infile, ": ", strerror(errno), STDERR_FILENO);
 	}
 	if (d->is_here_doc)
 		d->fds.out = open(outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	else
 		d->fds.out = open(outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (d->fds.out == -1)
-		msg(strerror(errno), ": ", outfile, STDERR_FILENO);
+		msg(outfile, ": ", strerror(errno), STDERR_FILENO);
 }
 
 static void	alloc_pipes(t_data *d)
@@ -41,7 +41,7 @@ static void	alloc_pipes(t_data *d)
 	d->pipes = ft_calloc((d->nb_cmds - 1) + 1, sizeof(int *));
 	if (!d->pipes)
 	{
-		msg(strerror(errno), ": ", "d->pipes malloc", STDERR_FILENO);
+		msg("d->pipes malloc", ": ", strerror(errno), STDERR_FILENO);
 		exit_process(EXIT_FAILURE, d);
 	}
 	i = -1;
@@ -50,7 +50,7 @@ static void	alloc_pipes(t_data *d)
 		d->pipes[i] = malloc(2 * sizeof(int));
 		if (!d->pipes[i])
 		{
-			msg(strerror(errno), ": ", "d->pipes[i] malloc", STDERR_FILENO);
+			msg("d->pipes[i] malloc", ": ", strerror(errno), STDERR_FILENO);
 			exit_process(EXIT_FAILURE, d);
 		}
 		d->pipes[i][READ] = -1;
@@ -62,14 +62,16 @@ static void	alloc_pipes(t_data *d)
 static void	create_pipes(t_data *d)
 {
 	int	i;
+	int	pipe_ret;
 
 	i = 0;
 	alloc_pipes(d);
 	while (i < (d->nb_cmds - 1))
 	{
-		if (pipe(d->pipes[i]) == -1)
+		pipe_ret = pipe(d->pipes[i]);
+		if (pipe_ret == -1)
 		{
-			msg(strerror(errno), ": ", "pipe", STDERR_FILENO);
+			msg("pipe", ": ", strerror(errno), STDERR_FILENO);
 			exit_process(EXIT_FAILURE, d);
 		}
 		i++;
@@ -78,17 +80,16 @@ static void	create_pipes(t_data *d)
 
 static void	clean_init_data(t_data *d)
 {
-	d->cmd = NULL;
-	d->cmd_path = NULL;
-	d->paths = NULL;
-	d->nb_cmds = -1;
-	d->pids = NULL;
 	d->pipes = NULL;
+	d->pids = NULL;
+	d->nb_cmds = -1;
+	d->is_here_doc = 0;
+	d->cmd = NULL;
+	d->err_file_names = NULL;
+	d->paths = NULL;
+	d->cmd_path = NULL;
 	d->fds.in = -1;
 	d->fds.out = -1;
-	d->msg_fd = STDERR_FILENO;
-	d->is_here_doc = 0;
-	d->err_file_names = NULL;
 }
 
 void	init_data(t_data *d, char **av, int ac, char **env)
@@ -103,7 +104,7 @@ void	init_data(t_data *d, char **av, int ac, char **env)
 	d->pids = malloc(d->nb_cmds * sizeof(int));
 	if (!d->pids)
 	{
-		msg(strerror(errno), ": ", "d->pids malloc", STDERR_FILENO);
+		msg("d->pids malloc", ": ", strerror(errno), STDERR_FILENO);
 		exit_process(EXIT_FAILURE, d);
 	}
 	create_pipes(d);
