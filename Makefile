@@ -86,7 +86,7 @@ fclean:
 	@echo "Full cleaned pipex"
 
 clean_pipex:
-	@rm -rf $(OBJ_DIR) $(NAME) $(BUILD_DIR)
+	@rm -rf $(OBJ_DIR) $(NAME)
 	@echo "Cleaned pipex (not libft)"
 
 re : fclean all
