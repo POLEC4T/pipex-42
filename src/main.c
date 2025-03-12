@@ -6,7 +6,7 @@
 /*   By: mniemaz <mniemaz@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 15:41:22 by mniemaz           #+#    #+#             */
-/*   Updated: 2025/03/10 11:02:58 by mniemaz          ###   ########.fr       */
+/*   Updated: 2025/03/12 14:20:22 by mniemaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	exit_if_wrong_ac(int ac, char **av)
 {
 	int	is_here_doc;
 
-	is_here_doc = ft_strncmp(av[1], "here_doc", 9) == 0;
+	is_here_doc = av[1] && ft_strncmp(av[1], "here_doc", 9) == 0;
 	if (BONUS && ac < (5 + is_here_doc))
 	{
 		msg("Bonus usage 1: ", BONUS_USAGE_1, "", STDERR_FILENO);
@@ -41,6 +41,5 @@ int	main(int ac, char **av, char **env)
 		process_here_doc(&d, av[2]);
 	start_children(&d, av, env);
 	status = wait_children(&d);
-	display_errors(&d);
 	exit_process(status, &d);
 }

@@ -6,7 +6,7 @@
 /*   By: mniemaz <mniemaz@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 15:41:22 by mniemaz           #+#    #+#             */
-/*   Updated: 2025/03/10 13:32:16 by mniemaz          ###   ########.fr       */
+/*   Updated: 2025/03/12 11:32:57 by mniemaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,5 +108,4 @@ void	init_data(t_data *d, char **av, int ac, char **env)
 		exit_process(EXIT_FAILURE, d);
 	}
 	create_pipes(d);
-	set_err_file_names(d);
 }

@@ -6,7 +6,7 @@
 /*   By: mniemaz <mniemaz@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 15:43:28 by mniemaz           #+#    #+#             */
-/*   Updated: 2025/03/10 13:31:40 by mniemaz          ###   ########.fr       */
+/*   Updated: 2025/03/12 14:26:11 by mniemaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,7 @@
 # define BONUS_USAGE_1 "./pipex infile cmd1 cmd2 ... cmdn outfile"
 # define BONUS_USAGE_2 "./pipex is_here_doc LIMITER cmd1 cmd2 ... cmdn outfile"
 # define MANDATORY_USAGE "./pipex infile cmd1 cmd2 outfile"
-# define HEREDOC_FILENAME ".build/.here_doc_tmp"
-# define ERR_FILE_NAME ".build/.err_file_"
+# define HEREDOC_FILENAME ".here_doc_tmp"
 
 # include "../libft/get_next_line.h"
 # include "../libft/libft.h"
@@ -55,14 +54,12 @@ typedef struct s_data
 
 // inits
 void		init_data(t_data *d, char **av, int ac, char **env);
-void		set_err_file_names(t_data *d);
 
 // exit
 void		exit_process(int error_status, t_data *data);
 
 // output
 void		msg(char *str1, char *str2, char *str3, int fd);
-void		display_errors(t_data *d);
 
 // close
 void		close_fds_and_pipes(t_data *d);
