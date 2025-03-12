@@ -6,13 +6,13 @@
 /*   By: mniemaz <mniemaz@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 15:41:22 by mniemaz           #+#    #+#             */
-/*   Updated: 2025/03/12 14:20:22 by mniemaz          ###   ########.fr       */
+/*   Updated: 2025/03/12 15:12:28 by mniemaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
 
-void	exit_if_wrong_ac(int ac, char **av)
+static void	exit_if_wrong_ac(int ac, char **av)
 {
 	int	is_here_doc;
 
