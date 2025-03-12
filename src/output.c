@@ -6,7 +6,7 @@
 /*   By: mniemaz <mniemaz@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 15:41:22 by mniemaz           #+#    #+#             */
-/*   Updated: 2025/03/12 14:33:12 by mniemaz          ###   ########.fr       */
+/*   Updated: 2025/03/12 15:00:32 by mniemaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	msg(char *str1, char *str2, char *str3, int fd)
 	len1 = ft_strlen(str1);
 	len2 = ft_strlen(str2);
 	len3 = ft_strlen(str3);
-	if (len1 + len2 + len3 + 8 > 1024)
+	if (7 + len1 + len2 + len3 + 1 > 1024)
 	{
 		ft_putstr_fd("pipex: msg: buffer overflow\n", STDERR_FILENO);
 		return ;
