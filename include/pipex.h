@@ -6,7 +6,7 @@
 /*   By: mniemaz <mniemaz@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 15:43:28 by mniemaz           #+#    #+#             */
-/*   Updated: 2025/03/12 14:26:11 by mniemaz          ###   ########.fr       */
+/*   Updated: 2025/03/13 14:02:27 by mniemaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@
 # define MANDATORY_USAGE "./pipex infile cmd1 cmd2 outfile"
 # define HEREDOC_FILENAME ".here_doc_tmp"
 
-# include "../libft/get_next_line.h"
-# include "../libft/libft.h"
+# include "../libft/include/get_next_line.h"
+# include "../libft/include/libft.h"
 # include <errno.h>
 # include <fcntl.h>
 # include <stdio.h>
@@ -46,7 +46,6 @@ typedef struct s_data
 	int		nb_cmds;
 	int		is_here_doc;
 	char	**cmd;
-	char	**err_file_names;
 	char	**paths;
 	char	*cmd_path;
 	t_fds	fds;

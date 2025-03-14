@@ -6,7 +6,7 @@
 /*   By: mniemaz <mniemaz@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:42:20 by mniemaz           #+#    #+#             */
-/*   Updated: 2025/03/10 13:00:30 by mniemaz          ###   ########.fr       */
+/*   Updated: 2025/03/13 12:44:15 by mniemaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,6 @@ void	exit_process(int error_status, t_data *data)
 			free_tab((void **)data->pipes);
 		if (data->is_here_doc)
 			unlink(HEREDOC_FILENAME);
-		if (data->err_file_names != NULL)
-			free_tab((void **)data->err_file_names);
 	}
 	exit(error_status);
 }

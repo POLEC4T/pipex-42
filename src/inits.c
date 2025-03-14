@@ -6,7 +6,7 @@
 /*   By: mniemaz <mniemaz@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 15:41:22 by mniemaz           #+#    #+#             */
-/*   Updated: 2025/03/12 11:32:57 by mniemaz          ###   ########.fr       */
+/*   Updated: 2025/03/13 12:44:16 by mniemaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,6 @@ static void	clean_init_data(t_data *d)
 	d->nb_cmds = -1;
 	d->is_here_doc = 0;
 	d->cmd = NULL;
-	d->err_file_names = NULL;
 	d->paths = NULL;
 	d->cmd_path = NULL;
 	d->fds.in = -1;
