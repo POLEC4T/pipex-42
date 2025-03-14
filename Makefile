@@ -38,7 +38,7 @@ libs:
 	@$(MAKE) -C $(LIBFT_DIR)
 
 $(NAME): $(OBJS) $(LIBFT_DIR)/libft.a
-	@$(CC) $(OBJS) -o $(NAME) $(LIBFT_DIR)/libft.a -D BONUS=$(BONUS) -g3
+	@$(CC) $(OBJS) -o $(NAME) $(LIBFT_DIR)/libft.a -D BONUS=$(BONUS)
 	@if [ $(BONUS) -eq 1 ]; then \
 		echo "$(GREEN)Compiled pipex with bonus$(END_COLOR)"; \
 	else \
@@ -60,7 +60,7 @@ bonus:
 	@$(MAKE) BONUS=1 all
 
 $(OBJ_DIR)/%.o : $(SRC_DIR)/%.c $(INC_DIR)/pipex.h Makefile | $(OBJ_DIR)
-	@$(CC) $(CFLAGS) -c $< -o $@ -D BONUS=$(BONUS) -g3
+	@$(CC) $(CFLAGS) -c $< -o $@ -D BONUS=$(BONUS)
 	@echo "Compiled $<"
 
 $(OBJ_DIR):
